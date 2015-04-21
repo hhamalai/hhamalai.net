@@ -1,0 +1,12 @@
+# Site settings
+title: hhamalai
+email: blog@hhamalai.net
+description: > # this means to ignore newlines until "baseurl:"
+    "Things I found out to be useful. Mostly software related, likely Python ones. "
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://hhamalai.net" # the base hostname & protocol for your site
+twitter_username: harrmi
+github_username:  hhamalai
+
+# Build settings
+markdown: kramdown
