@@ -1,0 +1,105 @@
+---
+layout: post
+title:  "OpenStack 101"
+date:   2015-07-24 18:00:00
+categories: openstack cloud python
+---
+
+As a cloud software engineer working closely with devops like tasks one of the
+questions most often asked by others working with our OpenStack installation is
+how to programmatically access and manage the OpenStack services.
+
+From the user's point of view the lowest level of access is provided by multiple
+OpenStack APIs (e.g. Compute API, Identity API, Object Storage API) while the
+more often used level of access is via command-line APIs. Under the hood these
+command-line APIs are just Python applications making requests to OpenStack ReST
+APIs. To interact with the OpenStack APIs the applications must have a few
+variables assigned (namely user credentials and the Keystone authentication URL)
+and they usually use the following workflow.
+
+1. Make a request to Keystone API's authentication URL to retrieve Identity API
+   details
+2. Make a request to Keystone API's tokens resource with user credentials to
+   retrieve authentication token with list of available OpenStack API endpoints
+3. Make a request to chosen OpenStack API with the authentication token
+
+One can add --debug argument to any of the OpenStack command line API 
+application to see the actual requests happening. These applications can take
+the user credentials as command line arguments or from specific environment
+variables which are set when OpenStack RC file (downloadable from the Horizon Web
+UI) is sourced.
+
+However, to write Python applications using the OpenStack API's the most convenient
+way is probably by using the command-line API libraries from one's Python code.
+Only downside is that these APIs are still bad poorly documented, which is
+probably why people are not that often aware of them. But the usage is pretty
+straightforward. To begin with one imports the specific client library after
+which the client is instantiated with user credentials and the authentication
+URL. In the example below I have created two helper functions: one to read 
+certain key from stdin if the key is not available as environment variable, and another
+function to return OpenStack Nova client object with required arguments read either from
+command line or from environment variables.
+
+The main function uses the nova client to list all OpenStack instances
+after which it creates a new instance. Once that instance is in active state all instances
+are listed again. In the end the instance is queried by its name and the
+instance is deleted.
+
+Another example how to work with Nova client library can be found e.g. from our
+Pouta [Blueprints code][blueprints].
+
+{% highlight python %}
+import os
+import sys
+import time
+
+from novaclient.v2 import client as nova_client
+
+
+def read_from_env_or_stdin(key):
+    value = os.getenv(key)
+    if value is not None:
+        return value
+    print("%s >" % key, end="")
+    return sys.stdin.readline().strip()
+
+
+def get_openstack_nova_client():
+    """Return nova client object used to communicate with OpenStack API"""
+    return nova_client.Client(
+        read_from_env_or_stdin('OS_USERNAME'),
+        read_from_env_or_stdin('OS_PASSWORD'),
+        read_from_env_or_stdin('OS_TENANT_NAME'),
+        read_from_env_or_stdin('OS_AUTH_URL'))
+
+
+def main():
+    cli = get_openstack_nova_client()
+    print("Listing servers")
+    for instance in cli.servers.list():
+        print(instance.name, instance.id, instance.status)
+    print("Creating a server")
+    server = cli.servers.create(
+        "Demo OpenStack VM",
+        cli.images.find(name="Ubuntu-14.04"),
+        cli.flavors.find(name="small"),
+        key_name="default")
+    print("Server (%s) booting . " % server.id, end="")
+    while cli.servers.get(server.id).status != 'ACTIVE':
+        time.sleep(5)
+        print(".", end="")
+    print()
+    print("Server up!")
+    print("Listing servers")
+    for instance in cli.servers.list():
+        print(instance.name, instance.id, instance.status)
+    print("Deleting server")
+    cli.servers.find(name='Demo OpenStack VM').delete()
+
+if __name__ == '__main__':
+    main()
+
+{% endhighlight %}
+
+[osdocs]:       http://docs.openstack.org/
+[blueprints]:   https://github.com/CSC-IT-Center-for-Science/pouta-blueprints/blob/master/pouta_blueprints/drivers/provisioning/openstack_driver.py
