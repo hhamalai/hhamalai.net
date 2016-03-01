@@ -3,8 +3,8 @@ layout: page
 title: About
 permalink: /about/
 ---
-Daily I work as a software specialist at CSC - IT Center for Science Ltd. building applications
-with AngularJS & Python usually on top of cloud platforms like OpenStack.
+Daily I work as a software designer at [Gofore Oy][gofore] building quality full-stack solutions
+and develop products for customer needs.
 
 I am the co-founder of Kirjakosmos Oy developing platform for the next generation of publishing and
 was also one of the founding members of Helsinki Hacklab, the first Finnish hackerspace.
@@ -21,3 +21,4 @@ hhamalai (æ) iki (ð) fi
 
 [varpuset]: https://soundcloud.com/tuomionvarpuset
 [linkedin]: https://fi.linkedin.com/in/hhamalai
+[gofore]: https://gofore.com/
