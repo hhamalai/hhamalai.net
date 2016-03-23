@@ -3,7 +3,7 @@ layout: page
 title: About
 permalink: /about/
 ---
-Daily I work as a software designer at [Gofore Oy][gofore] building quality full-stack solutions
+Daily I work as a software engineer at [Gofore Oy][gofore] building quality full-stack solutions
 and develop products for customer needs.
 
 I am the co-founder of Kirjakosmos Oy developing platform for the next generation of publishing and
