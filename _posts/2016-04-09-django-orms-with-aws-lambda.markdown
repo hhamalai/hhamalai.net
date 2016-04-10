@@ -18,9 +18,9 @@ can implement code that runs on the worker node upon as a consequence of some ac
 processing entity. All these services are viable alternatives for the communication channel and we are left
 with the question about where to run the worker code. AWS EC2 (Elastic Compute Cloud) virtual machine instances or ECS
 (Elastic Container Service) are viable options. Of course one can also run own messaging solution on either of
-these services omitting the messaging services offerent by the AWS.
+these services omitting the messaging services offered by the AWS.
 
-I've been running [Celery](http://www.celeryproject.org/) in few project to fullfill the high level task
+I've been running [Celery](http://www.celeryproject.org/) in few project to fulfill the high level task
 distribution needs while inside it I've been using both RabbitMQ, Redis, and AWS SQS in different projects.
 These all work pretty nicely (even the Celery with AWS SQS with its experimental status). But
 having your own worker infrastructure has some issues that the system architect must keep in mind.
@@ -54,14 +54,14 @@ follows soon.
 
 AWS Lambda can currently execute your Python 2.7, Node.js v4.3.2 or Java 8 applications. The execution
 environment is of course managed by AWS and the details are available [here](http://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html).
-Any extra libraries not included in the standard library of your platform or preinstalled in the listed AWS
+Any extra libraries not included in the standard library of your platform or pre-installed in the listed AWS
 EC2 instances must be included in the code bundle uploaded to AWS Lambda. In case of my Django application, I
 really want to share the my models with the code running on AWS Lambda, so I need mostly the same libraries
 for the models which are also used on the application server serving the user requests. In case of Python this
 the usage of Virtualenvs is encouraged by AWS and instructions for doing so are [here](http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html).
 
 Next issue was some C extensions, namely [Pillow](https://github.com/python-pillow/Pillow/) and the
-[Psycopg2](http://initd.org/psycopg/) used by my Django appllication to connect to database running on AWS RDS
+[Psycopg2](http://initd.org/psycopg/) used by my Django application to connect to database running on AWS RDS
 (Relational Database Service). These extensions must be binary compatible with the AWS execution environment. The
 only easy way of doing this is to launch a new EC2 instance from Amazon Machine Image used by AWS Lambda which
 are listed in the execution environment [description](http://docs.aws.amazon.com/lambda/latest/dg/current-supported-versions.html).
