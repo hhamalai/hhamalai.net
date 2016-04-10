@@ -60,7 +60,7 @@ really want to share the my models with the code running on AWS Lambda, so I nee
 for the models which are also used on the application server serving the user requests. In case of Python this
 the usage of Virtualenvs is encouraged by AWS and instructions for doing so are [here](http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html).
 
-Next issue was some C extensions, namely [Pillow](https://github.com/python-pillow/Pillow/) and the
+Next issue were some C extensions, namely [Pillow](https://github.com/python-pillow/Pillow/) and the
 [Psycopg2](http://initd.org/psycopg/) used by my Django application to connect to database running on AWS RDS
 (Relational Database Service). These extensions must be binary compatible with the AWS execution environment. The
 only easy way of doing this is to launch a new EC2 instance from Amazon Machine Image used by AWS Lambda which
