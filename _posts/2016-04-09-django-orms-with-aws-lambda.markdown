@@ -75,6 +75,12 @@ This way the Lambda task can connect to RDS instance running on your AWS VPC (Vi
 
 Once dependencies are installed and you have built the bundle as instructed by Amazon the next thing is to
 create a new Lambda function, upload the bundle, and create event source that triggers the Lambda function.
+For a cron like event scheduling AWS Lambda offers [scheduled
+events](http://docs.aws.amazon.com/lambda/latest/dg/with-scheduled-events.html).
 
 Your Lambda function log outputs are available in CloudWatch as well as the execution times and the real
 amount of memory consumed by your Lambda function.
+
+While the process of bundling new Lambda functions with libraries used in the real world scenarios is not the
+most convenient process, I am still quite fan boy about the service in general. If it's task queues that
+you are wondering to replace, this is likely very reasonable approach.
